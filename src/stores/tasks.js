@@ -10,19 +10,23 @@ export const useTasksStore = defineStore('tasks', () => {
   const pendingTasks = computed(() => tasks.value.filter((t) => !t.done));
   const completedTasks = computed(() => tasks.value.filter((t) => t.done));
 
-  async function fetchTasks() {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await tasksApi.getAll();
-      tasks.value = response.data;
-    } catch (err) {
-      error.value = 'Erro ao carregar tarefas.';
-      console.error(err);
-    } finally {
-      loading.value = false;
-    }
+async function fetchTasks() {
+  loading.value = true;
+  error.value = null;
+
+  try {
+    const response = await tasksApi.getAll();
+
+    console.log("Resposta da API:", response.data);
+    console.log("É um array?", Array.isArray(response.data));
+
+    tasks.value = response.data;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    loading.value = false;
   }
+}
 
   async function addTask(title) {
     if (!title.trim()) return;
