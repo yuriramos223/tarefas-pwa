@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         cleanupOutdatedCaches: true,
@@ -45,7 +45,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /^https:\/\/api\.exemplo\.com\/.*/i,
+            urlPattern: /^http:\/\/localhost:8001\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',

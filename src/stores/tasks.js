@@ -10,23 +10,19 @@ export const useTasksStore = defineStore('tasks', () => {
   const pendingTasks = computed(() => tasks.value.filter((t) => !t.done));
   const completedTasks = computed(() => tasks.value.filter((t) => t.done));
 
-async function fetchTasks() {
-  loading.value = true;
-  error.value = null;
-
-  try {
-    const response = await tasksApi.getAll();
-
-    console.log("Resposta da API:", response.data);
-    console.log("É um array?", Array.isArray(response.data));
-
-    tasks.value = response.data;
-  } catch (err) {
-    console.error(err);
-  } finally {
-    loading.value = false;
+  async function fetchTasks() {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await tasksApi.getAll();
+      tasks.value = response.data;
+    } catch (err) {
+      error.value = 'Erro ao carregar tarefas.';
+      console.error(err);
+    } finally {
+      loading.value = false;
+    }
   }
-}
 
   async function addTask(title) {
     if (!title.trim()) return;
@@ -65,11 +61,14 @@ async function fetchTasks() {
     }
   }
 
-  async function updateTaskTitle(id, title) {
-    if (!title.trim()) return;
+  async function updateTask(id, { title, imgAttachmentKey } = {}) {
+    if (title !== undefined && !title.trim()) return;
     error.value = null;
+    const payload = {};
+    if (title !== undefined) payload.title = title.trim();
+    if (imgAttachmentKey != null) payload.img_attachment_key = imgAttachmentKey;
     try {
-      const response = await tasksApi.update(id, { title: title.trim() });
+      const response = await tasksApi.update(id, payload);
       const index = tasks.value.findIndex((t) => t.id === id);
       if (index !== -1) tasks.value[index] = response.data;
     } catch (err) {
@@ -88,6 +87,6 @@ async function fetchTasks() {
     addTask,
     toggleTask,
     removeTask,
-    updateTaskTitle,
+    updateTask,
   };
 });
