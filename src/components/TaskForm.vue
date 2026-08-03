@@ -1,3 +1,52 @@
+<template>
+  <form class="task-form" @submit.prevent="handleSubmit">
+    <div class="task-row">
+      <input
+        v-model="newTask"
+        type="text"
+        placeholder="Nova tarefa..."
+        class="task-input"
+      />
+      <button type="submit" class="task-button" :disabled="uploading">
+        {{ editingTask ? 'Alterar' : 'Adicionar' }}
+      </button>
+      <button
+        v-if="editingTask"
+        type="button"
+        class="task-button-cancel"
+        @click="handleCancel"
+      >
+        Cancelar
+      </button>
+    </div>
+
+    <div v-if="editingTask" class="image-section">
+      <img
+        v-if="previewUrl || editingTask.img_url"
+        :src="previewUrl || editingTask.img_url"
+        class="image-preview"
+        alt="Imagem da tarefa"
+      />
+      <label class="image-label" :class="{ disabled: uploading }">
+        <span v-if="uploading" class="upload-status">Enviando...</span>
+        <span v-else>
+          {{ previewUrl || editingTask.img_url
+            ? 'Trocar imagem'
+            : 'Adicionar imagem'
+          }}
+        </span>
+        <input
+          type="file"
+          accept="image/jpeg,image/png"
+          class="image-input"
+          :disabled="uploading"
+          @change="handleImageChange"
+        />
+      </label>
+    </div>
+  </form>
+</template>
+
 <script setup>
 import { ref, watch } from 'vue'
 import tasksApi from '../api/tasksApi.js'
@@ -65,55 +114,6 @@ function handleCancel() {
   emit('cancel')
 }
 </script>
-
-<template>
-  <form class="task-form" @submit.prevent="handleSubmit">
-    <div class="task-row">
-      <input
-        v-model="newTask"
-        type="text"
-        placeholder="Nova tarefa..."
-        class="task-input"
-      />
-      <button type="submit" class="task-button" :disabled="uploading">
-        {{ editingTask ? 'Alterar' : 'Adicionar' }}
-      </button>
-      <button
-        v-if="editingTask"
-        type="button"
-        class="task-button-cancel"
-        @click="handleCancel"
-      >
-        Cancelar
-      </button>
-    </div>
-
-    <div v-if="editingTask" class="image-section">
-      <img
-        v-if="previewUrl || editingTask.img_url"
-        :src="previewUrl || editingTask.img_url"
-        class="image-preview"
-        alt="Imagem da tarefa"
-      />
-      <label class="image-label" :class="{ disabled: uploading }">
-        <span v-if="uploading" class="upload-status">Enviando...</span>
-        <span v-else>
-          {{ previewUrl || editingTask.img_url
-            ? 'Trocar imagem'
-            : 'Adicionar imagem'
-          }}
-        </span>
-        <input
-          type="file"
-          accept="image/jpeg,image/png"
-          class="image-input"
-          :disabled="uploading"
-          @change="handleImageChange"
-        />
-      </label>
-    </div>
-  </form>
-</template>
 
 <style scoped>
 .task-form {
