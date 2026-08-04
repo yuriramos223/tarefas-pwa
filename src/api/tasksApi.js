@@ -5,9 +5,9 @@ const tasksApi = {
     return apiClient.get('/tasks')
   },
 
-  create(title) {
-    return apiClient.post('/tasks', { title })
-  },
+  create(data) {
+  return apiClient.post('/tasks', data)
+},
 
   update(id, data) {
     return apiClient.patch(`/tasks/${id}`, data)

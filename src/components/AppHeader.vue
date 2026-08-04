@@ -13,7 +13,7 @@ function handleLogout() {
 
 <template>
   <header class="app-header">
-    <h1>Meus gestor de Tarefas!!!!</h1>
+    <h1>Meu gestor de Tarefas</h1>
     <nav>
       <router-link to="/">Início</router-link>
       <router-link to="/about">Sobre</router-link>
