@@ -128,7 +128,7 @@ function handleCancel() {
     <span v-else>Adicionar imagem</span>
     <input
       type="file"
-      accept="image/*"
+      accept="image/jpeg,image/png"
       capture="environment"
       class="image-input"
       :disabled="uploading"
@@ -138,12 +138,12 @@ function handleCancel() {
 
   <!-- Alternativa com preview ao vivo -->
   <button
-  type="button"
-  class="task-button-secondary"
-  @click="showCameraCapture = !showCameraCapture"
->
-  {{ showCameraCapture ? 'Fechar câmera' : 'Abrir preview ao vivo' }}
-</button>
+    type="button"
+    class="task-button-secondary"
+    @click="showCameraCapture = !showCameraCapture"
+  >
+    {{ showCameraCapture ? 'Fechar câmera' : 'Abrir preview ao vivo' }}
+  </button>
 
   <CameraCapture
     v-if="showCameraCapture"
