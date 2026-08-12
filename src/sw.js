@@ -77,7 +77,7 @@ self.addEventListener('push', (event) => {
       body,
       icon: icon || '/icons/icon-192x192.png',
       badge: '/icons/icon-192x192.png',
-      data: payload,          //
+      data: payload, //
       vibrate: [200, 100, 200],
     }),
   )
@@ -113,23 +113,22 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close()
 
   event.waitUntil(
-    self.clients
-      .matchAll({ type: 'window', includeUncontrolled: true })
-      .then((clientList) => {
-        // Se o app já está aberto em alguma aba, foca ela
-        for (const client of clientList) {
-          if (client.url.includes(self.registration.scope) && 'focus' in client) {
-            client.postMessage({ //
-              type: 'PUSH_NOTIFICATION_CLICKED',
-              payload: event.notification.data,
-            })
-            return client.focus()
-          }
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Se o app já está aberto em alguma aba, foca ela
+      for (const client of clientList) {
+        if (client.url.includes(self.registration.scope) && 'focus' in client) {
+          client.postMessage({
+            //
+            type: 'PUSH_NOTIFICATION_CLICKED',
+            payload: event.notification.data,
+          })
+          return client.focus()
         }
-        // Senão, abre uma nova janela
-        if (self.clients.openWindow) {
-          return self.clients.openWindow('/')
-        }
-      }),
+      }
+      // Senão, abre uma nova janela
+      if (self.clients.openWindow) {
+        return self.clients.openWindow('/')
+      }
+    }),
   )
 })
