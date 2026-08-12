@@ -18,10 +18,11 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('access_token', data.access_token)
     localStorage.setItem('refresh_token', data.refresh_token)
 
+    // Se a permissão já foi concedida, subscribe agora — sem await para não bloquear o login
     if (
       'serviceWorker' in navigator &&
       'Notification' in window &&
-      Notification.permission === 'granted' //
+      Notification.permission === 'granted' // 
     ) {
       navigator.serviceWorker.ready
         .then((reg) => subscribe(reg))
@@ -30,7 +31,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout() {
-    await unsubscribe() //
+    await unsubscribe() // 
     accessToken.value = null
     refreshToken.value = null
     localStorage.removeItem('access_token')
