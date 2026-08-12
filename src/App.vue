@@ -1,12 +1,3 @@
-<template>
-  <OfflineBanner />
-  <AppHeader />
-  <main>
-    <router-view />
-  </main>
-  <NotificationPrompt />
-</template>
-
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
 import AppHeader from './components/AppHeader.vue'
@@ -50,3 +41,12 @@ onUnmounted(() => {
   }
 })
 </script>
+
+<template>
+  <OfflineBanner />
+  <AppHeader />
+  <main>
+    <router-view />
+  </main>
+  <NotificationPrompt />
+</template>

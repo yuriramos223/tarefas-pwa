@@ -25,7 +25,6 @@ export function usePushNotifications() {
     if (!isSupported.value || !swRegistration) return null
 
     try {
-      // Fallback: busca a chave no backend se não estiver no .env
       let vapidKey = VAPID_PUBLIC_KEY
       if (!vapidKey) {
         const { data } = await api.get('/api/vapid-public-key')
@@ -37,7 +36,6 @@ export function usePushNotifications() {
         applicationServerKey: urlBase64ToUint8Array(vapidKey),
       })
 
-      // Serializa as chaves de ArrayBuffer para base64
       await api.post('/api/subscriptions', {
         endpoint: subscription.endpoint,
         keys: {
@@ -46,7 +44,6 @@ export function usePushNotifications() {
         },
       })
 
-      // Salva o endpoint para o interceptor Axios enviar no header X-Push-Endpoint
       localStorage.setItem('push_endpoint', subscription.endpoint)
       return subscription
     } catch (err) {

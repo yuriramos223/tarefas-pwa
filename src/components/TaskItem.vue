@@ -1,3 +1,14 @@
+<script setup>
+defineProps({
+  task: {
+    type: Object,
+    required: true,
+  },
+});
+
+defineEmits(['toggle', 'remove', 'edit']);
+</script>
+
 <template>
   <div class="task-item" :class="{ done: task.done }">
   <img
@@ -23,16 +34,6 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-});
-
-defineEmits(['toggle', 'remove', 'edit']);
-</script>
 
 <style scoped>
 .task-item {

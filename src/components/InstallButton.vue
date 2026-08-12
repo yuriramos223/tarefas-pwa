@@ -1,9 +1,3 @@
-<template>
-  <button v-if="showInstallButton" class="install-button" @click="installApp">
-    Instalar aplicativo
-  </button>
-</template>
-
 <script setup>
 import { ref, onMounted } from 'vue';
 
@@ -12,16 +6,12 @@ let deferredPrompt = null;
 
 onMounted(() => {
   window.addEventListener('beforeinstallprompt', (event) => {
-    // Impede o banner automático do navegador
     event.preventDefault();
-    // Armazena o evento para usar depois
     deferredPrompt = event;
-    // Mostra o botão customizado
     showInstallButton.value = true;
   });
 
   window.addEventListener('appinstalled', () => {
-    // Esconde o botão quando o app for instalado
     showInstallButton.value = false;
     deferredPrompt = null;
   });
@@ -30,10 +20,8 @@ onMounted(() => {
 async function installApp() {
   if (!deferredPrompt) return;
 
-  // Mostra o prompt de instalação do navegador
   deferredPrompt.prompt();
 
-  // Aguarda a resposta do usuário
   const { outcome } = await deferredPrompt.userChoice;
 
   if (outcome === 'accepted') {
@@ -43,6 +31,12 @@ async function installApp() {
   deferredPrompt = null;
 }
 </script>
+
+<template>
+  <button v-if="showInstallButton" class="install-button" @click="installApp">
+    Instalar aplicativo
+  </button>
+</template>
 
 <style scoped>
 .install-button {

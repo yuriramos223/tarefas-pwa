@@ -18,27 +18,27 @@ const uploading = ref(false)
 const showCameraCapture = ref(false)
 
 function handleCameraCapture(file) {
-  previewUrl.value = URL.createObjectURL(file);
-  uploading.value = true;
+  previewUrl.value = URL.createObjectURL(file)
+  uploading.value = true
   tasksApi
     .uploadImage(file)
     .then((response) => {
-      imgAttachmentKey.value = response.data.attachment_key;
+      imgAttachmentKey.value = response.data.attachment_key
     })
     .catch((err) => {
-      console.error(err);
-      previewUrl.value = null;
+      console.error(err)
+      previewUrl.value = null
     })
     .finally(() => {
-      uploading.value = false;
-    });
+      uploading.value = false
+    })
 }
 
 watch(
   () => props.editingTask,
   (task) => {
     newTask.value = task ? task.title : ''
-    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+    if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
     previewUrl.value = null
     imgAttachmentKey.value = null
   },
@@ -47,7 +47,7 @@ watch(
 async function handleImageChange(event) {
   const file = event.target.files[0]
   if (!file) return
-  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
   previewUrl.value = URL.createObjectURL(file)
   uploading.value = true
   try {
@@ -63,28 +63,28 @@ async function handleImageChange(event) {
 }
 
 function handleSubmit() {
-  if (!newTask.value.trim()) return;
+  if (!newTask.value.trim()) return
 
   const payload = {
     title: newTask.value.trim(),
     imgAttachmentKey: imgAttachmentKey.value,
-  };
-
-  if (props.editingTask) {
-    emit('update', props.editingTask.id, payload);
-  } else {
-    emit('add', payload);
   }
 
-  newTask.value = '';
-  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
-  previewUrl.value = null;
-  imgAttachmentKey.value = null;
+  if (props.editingTask) {
+    emit('update', props.editingTask.id, payload)
+  } else {
+    emit('add', payload)
+  }
+
+  newTask.value = ''
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
+  previewUrl.value = null
+  imgAttachmentKey.value = null
 }
 
 function handleCancel() {
   newTask.value = ''
-  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value);
+  if (previewUrl.value) URL.revokeObjectURL(previewUrl.value)
   previewUrl.value = null
   imgAttachmentKey.value = null
   emit('cancel')
@@ -94,62 +94,46 @@ function handleCancel() {
 <template>
   <form class="task-form" @submit.prevent="handleSubmit">
     <div class="task-row">
-      <input
-        v-model="newTask"
-        type="text"
-        placeholder="Nova tarefa..."
-        class="task-input"
-      />
+      <input v-model="newTask" type="text" placeholder="Nova tarefa..." class="task-input" />
       <button type="submit" class="task-button" :disabled="uploading">
         {{ editingTask ? 'Alterar' : 'Adicionar' }}
       </button>
-      <button
-        v-if="editingTask"
-        type="button"
-        class="task-button-cancel"
-        @click="handleCancel"
-      >
+      <button v-if="editingTask" type="button" class="task-button-cancel" @click="handleCancel">
         Cancelar
       </button>
     </div>
 
-  <div class="image-section">
-  <!-- Preview da imagem já salva ou capturada -->
-  <img
-    v-if="previewUrl || editingTask?.img_url"
-    :src="previewUrl || editingTask?.img_url"
-    class="image-preview"
-    alt="Imagem da tarefa"
-  />
+    <div class="image-section">
+      <img
+        v-if="previewUrl || editingTask?.img_url"
+        :src="previewUrl || editingTask?.img_url"
+        class="image-preview"
+        alt="Imagem da tarefa"
+      />
 
-  <!-- Input com capture (padrão) -->
-  <label class="image-label" :class="{ disabled: uploading }">
-    <span v-if="uploading" class="upload-status">Enviando...</span>
-    <span v-else>Adicionar imagem</span>
-    <input
-      type="file"
-      accept="image/jpeg,image/png"
-      capture="environment"
-      class="image-input"
-      :disabled="uploading"
-      @change="handleImageChange"
-    />
-  </label>
+      <label class="image-label" :class="{ disabled: uploading }">
+        <span v-if="uploading" class="upload-status">Enviando...</span>
+        <span v-else>Adicionar imagem</span>
+        <input
+          type="file"
+          accept="image/jpeg,image/png"
+          capture="environment"
+          class="image-input"
+          :disabled="uploading"
+          @change="handleImageChange"
+        />
+      </label>
 
-  <!-- Alternativa com preview ao vivo -->
-  <button
-    type="button"
-    class="task-button-secondary"
-    @click="showCameraCapture = !showCameraCapture"
-  >
-    {{ showCameraCapture ? 'Fechar câmera' : 'Abrir preview ao vivo' }}
-  </button>
+      <button
+        type="button"
+        class="task-button-secondary"
+        @click="showCameraCapture = !showCameraCapture"
+      >
+        {{ showCameraCapture ? 'Fechar câmera' : 'Abrir preview ao vivo' }}
+      </button>
 
-  <CameraCapture
-    v-if="showCameraCapture"
-    @captured="handleCameraCapture"
-  />
-</div>
+      <CameraCapture v-if="showCameraCapture" @captured="handleCameraCapture" />
+    </div>
   </form>
 </template>
 

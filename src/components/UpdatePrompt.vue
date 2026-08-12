@@ -1,15 +1,3 @@
-<template>
-  <div v-if="needRefresh" class="update-prompt">
-    <p>Uma nova versão está disponível.</p>
-    <div class="update-actions">
-      <button class="update-button" @click="updateServiceWorker()">
-        Atualizar agora
-      </button>
-      <button class="dismiss-button" @click="close()">Depois</button>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { useRegisterSW } from 'virtual:pwa-register/vue';
 
@@ -34,6 +22,18 @@ function close() {
   needRefresh.value = false;
 }
 </script>
+
+<template>
+  <div v-if="needRefresh" class="update-prompt">
+    <p>Uma nova versão está disponível.</p>
+    <div class="update-actions">
+      <button class="update-button" @click="updateServiceWorker()">
+        Atualizar agora
+      </button>
+      <button class="dismiss-button" @click="close()">Depois</button>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .update-prompt {

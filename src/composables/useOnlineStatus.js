@@ -1,7 +1,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const HEARTBEAT_INTERVAL = 10_000; // 10 segundos
-const FETCH_TIMEOUT = 5_000; // 5 segundos
+const HEARTBEAT_INTERVAL = 10_000;
+const FETCH_TIMEOUT = 5_000;
 
 export function useOnlineStatus() {
   const isOnline = ref(navigator.onLine);
@@ -21,8 +21,6 @@ export function useOnlineStatus() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
-      // Faz HEAD request para um recurso pequeno do próprio domínio
-      // O cache-bust via query string evita resposta do cache HTTP
       await fetch(
         `${window.location.origin}/icons/icon-192x192.png?_=${Date.now()}`,
         {
@@ -44,10 +42,8 @@ export function useOnlineStatus() {
     window.addEventListener('online', updateStatus);
     window.addEventListener('offline', updateStatus);
 
-    // Verificação inicial real de conectividade
     checkConnectivity();
 
-    // Heartbeat periódico
     intervalId = setInterval(checkConnectivity, HEARTBEAT_INTERVAL);
   });
 

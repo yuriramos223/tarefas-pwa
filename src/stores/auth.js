@@ -18,7 +18,6 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('access_token', data.access_token)
     localStorage.setItem('refresh_token', data.refresh_token)
 
-    // Se a permissão já foi concedida, subscribe agora — sem await para não bloquear o login
     if (
       'serviceWorker' in navigator &&
       'Notification' in window &&
