@@ -26,20 +26,9 @@ export default defineConfig({
         id: 'com.task-manager.app',
         icons: [
           {
-            src: '/icons/icon-192x192.png',
+            src: '/icons/analise.png',
             sizes: '192x192',
             type: 'image/png',
-          },
-          {
-            src: '/icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-          {
-            src: '/icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
           },
         ],
       },
